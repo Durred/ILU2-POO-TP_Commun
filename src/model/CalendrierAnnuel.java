@@ -3,19 +3,25 @@ package model;
 public class CalendrierAnnuel {
 	private Mois[] calendrier = new Mois[12];
 	
+	public CalendrierAnnuel() {
+		int i = 0;
+		for (EnumMois itMois : EnumMois.values()) {
+			calendrier[i] = new Mois(itMois.valeurJours());
+			i++;
+		}
+	}
+	
 	private static class Mois {
-		private String nom;
-		private Boolean[] jours;
+		private boolean[] jours;
 		
-		private Mois(String nom, int nbJours) {
-			this.nom = nom;
-			jours = new Boolean[nbJours];
+		private Mois(int nbJours) {
+			jours = new boolean[nbJours];
 			for(int i = 0; i<nbJours;i++) {
 				jours[i] = false;
 			}
 		}
 		
-		private Boolean estLibre(int jour) {
+		private boolean estLibre(int jour) {
 			return !jours[jour];
 		}
 		
@@ -29,19 +35,11 @@ public class CalendrierAnnuel {
 		}
 	}
 	
-	public CalendrierAnnuel() {
-		int i = 0;
-		for (EnumMois itMois : EnumMois.values()) {
-			calendrier[i] = new Mois(itMois.valeurNom(), itMois.valeurJours());
-			i++;
-		}
-	}
-	
-	public Boolean estLibre(int jour, int mois) {
+	public boolean estLibre(int jour, int mois) {
 		return calendrier[mois-1].estLibre(jour-1);
 	}
 	
-	public Boolean reserver(int jour, int mois) {
+	public boolean reserver(int jour, int mois) {
 		if(estLibre(jour, mois)) {
 			calendrier[mois-1].reserver(jour-1);
 			return !estLibre(jour, mois);
